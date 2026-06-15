@@ -3,10 +3,12 @@ use zed_extension_api as zed;
 struct LispBMExtension {}
 
 fn get_command_for_language_server(
-    language_server_id: &zed::LanguageServerId,
-    _worktree: &zed::Worktree,
+    _language_server_id: &zed::LanguageServerId,
+    worktree: &zed::Worktree,
 ) -> zed::Result<String> {
-    Ok("/home/cortex/Projects/Personal/lispbm-lsp/target/debug/lispbm-lsp".to_string())
+    worktree
+        .which("lispbm-lsp")
+        .ok_or_else(|| String::from("Could not find 'lispbm-lsp' in the PATH"))
 }
 
 impl zed::Extension for LispBMExtension {
